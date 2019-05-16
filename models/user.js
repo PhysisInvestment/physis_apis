@@ -23,17 +23,20 @@ const userSchema = new Schema({
     type: String,
     enum: ['low', 'mdeium', 'high']
   },
+  userGoals: {
+    type: [Number]
+  },
   helpPyhsisSaveMoneyFlag: Boolean,
   investingFor: String,
   dob: Date,
-  userMakesMoney: Number,
+  userMakesMoney: String,
   userPortfolio: {
     type: [String]
   },
   userThemes: {
     type: [String]
   },
-  investmentPerYear: Number
+  investmentPerYear: String
 })
 
 export const User = dynamoose.model(process.env.USER_TABLE, userSchema)

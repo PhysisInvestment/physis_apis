@@ -1,49 +1,51 @@
+
 if (!global._babelPolyfill) {
   require('babel-polyfill')
 }
-
+import KMS from 'aws-sdk/clients/kms' // eslint-disable-line
 import { User } from '../models/user' // eslint-disable-line
-import pe from 'parse-error' // eslint-disable-line
-import omit from 'lodash/omit' // eslint-disable-line
 import middy from 'middy' // eslint-disable-line
 import { cors } from 'middy/middlewares' // eslint-disable-line
 
-const handler = async ({ body }, context, callback) => {
-  console.log('check ::::::::  ', body)
-  const [err, item] = await to(addItem(User, body))
+let kmsClient = new KMS()
 
-  if (err) {
-    callback(null, handleErr(err))
-  } else {
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify({ userCreated: true })
+const handler = ({ body }, context, callback) => {
+  console.log(body)
+  const sigupObject = JSON.parse(body)
+  const params = {
+    KeyId: '490a2fd0-43d5-49e7-aa67-2f4bf6ee804b',
+    Plaintext: sigupObject.password
+  }
+  const encryptionError = {
+    statusCode: 500,
+    body: JSON.stringify('error on encrypting password')
+  }
+
+  kmsClient.encrypt(params, (err, data) => {
+    if (err) {
+      console.log(err)
+      callback(null, encryptionError)
+    } else {
+      sigupObject.password = data.CiphertextBlob.toString('base64')
+      User.create(sigupObject, (err, dynamoResponse) => {
+        if (err) {
+          console.log(err)
+          callback(null, {
+            statusCode: 500,
+            body: JSON.stringify('error on saving on dynamo check data schema')
+          })
+        } else {
+          console.log(dynamoResponse)
+          const response = {
+            statusCode: 200,
+            body: JSON.stringify({userCreated: true})
+          }
+          callback(null, response)
+        }
+      })
     }
-
-    console.log(` => Item stored [${item.id}]`)
-    callback(null, response)
   }
-}
-
-// Creates and saves one item based in the Item model
-const addItem = (collection, data) => {
-  const parsed = JSON.parse(data)
-  return collection.create(parsed)
-}
-
-// *** Error handling support in promises
-const to = promise =>
-  promise
-    .then(data => [null, data])
-    .catch(err => [pe(err)])
-
-const handleErr = (error, statusCode = 500) => {
-  console.error(' => ERROR:', error.stack)
-
-  return {
-    statusCode,
-    body: JSON.stringify({ error })
-  }
+  )
 }
 
 export const signUpUser = middy(handler)
