@@ -15,7 +15,7 @@ export const updateOne = async ({ body, pathParameters: { id } }, context, callb
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(item)
-    }
+    };
 
     console.log(` => Item updated [${item.id}]`)
     callback(null, response)

@@ -19,7 +19,7 @@ const handler = ({body}, context, callback) => {
     console.log()
 
     if (err) {
-      console.log(err)
+      console.log(err);
       callback(null, handleErr(err))
     } else {
       console.log(` => got item `, item)

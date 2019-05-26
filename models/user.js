@@ -19,6 +19,8 @@ const userSchema = new Schema({
   lastName: String,
   address: String,
   country: String,
+  s3KeyForPhoto: String,
+  cellPhone: String,
   riskTolerance: {
     type: String,
     enum: ['low', 'mdeium', 'high']

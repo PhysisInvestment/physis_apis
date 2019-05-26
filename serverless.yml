@@ -67,6 +67,14 @@ functions:
           path: api/isUserLoggedIn
           method: get
           cors: true
+
+  updateUserProfile:
+    handler: handlers/updateProfile.updateProfile
+    events:
+      - http:
+          path: api/updateUserProfile
+          method: put
+          cors: true
   # updateOne:
   #   handler: handlers/update.updateOne
   #   events:
