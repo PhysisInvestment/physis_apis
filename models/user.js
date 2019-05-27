@@ -38,7 +38,8 @@ const userSchema = new Schema({
   userThemes: {
     type: [String]
   },
-  investmentPerYear: String
+  investmentPerYear: String,
+  investmentPerMonth: String
 })
 
 export const User = dynamoose.model(process.env.USER_TABLE, userSchema)
