@@ -7,6 +7,8 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 
 plugins:
   - serverless-webpack
+  - serverless-aws-alias
+  - serverless-pseudo-parameters
 
 custom:
   webpack:
@@ -15,11 +17,11 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs8.10
-  stage: ${opt:stage, 'dev'}
+  runtime: nodejs10.x
+  stage: ${opt:stage, 'prod'}
   region: us-east-1
   environment:
-      USER_TABLE: physis_user-${opt:stage, self:provider.stage}
+      USER_TABLE: ProdPhysisUser
 
   iamRoleStatements:
     - Effect: Allow
@@ -28,22 +30,6 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/*"
 
 functions:
-  signup:
-    handler: handlers/signup.signUpUser
-    events:
-      - http:
-          path: api/auth/signup
-          method: post
-          cors: true
-
-  login:
-    handler: handlers/login.loginUser
-    events:
-      - http:
-          path: api/auth/login
-          method: post
-          cors: true
-
   emailExists:
     handler: handlers/emailExisits.checkEmailExists
     events:
@@ -60,13 +46,7 @@ functions:
           method: get
           cors: true
 
-  userIsLoggedIn:
-    handler: handlers/userIsLoggedIn.loggedInUser
-    events:
-      - http:
-          path: api/isUserLoggedIn
-          method: get
-          cors: true
+
 
   updateUserProfile:
     handler: handlers/updateProfile.updateProfile
@@ -75,38 +55,23 @@ functions:
           path: api/updateUserProfile
           method: put
           cors: true
-  # updateOne:
-  #   handler: handlers/update.updateOne
-  #   events:
-  #     - http:
-  #         path: api/item/{id}
-  #         method: put
-  #         cors: true
 
-  # deleteOne:
-  #   handler: handlers/delete.deleteOne
-  #   events:
-  #     - http:
-  #         path: api/item/{id}
-  #         method: delete
-  #         cors: true
-
-resources:
-  Resources:
-    userTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        ## a formality for creating table
-        AttributeDefinitions:
-          -
-            AttributeName: email
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: email
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 15
-          WriteCapacityUnits: 5
-        TableName: ${self:provider.environment.USER_TABLE}
+#resources:
+# Resources:
+#    userTable:
+#     Type: 'AWS::DynamoDB::Table'
+#      DeletionPolicy: Retain
+#      Properties:
+#        ## a formality for creating table
+#        AttributeDefinitions:
+#          -
+#            AttributeName: CognitoId
+#            AttributeType: S
+#        KeySchema:
+#          -
+#            AttributeName: CognitoId
+#            KeyType: HASH
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 15
+#          WriteCapacityUnits: 5
+#        TableName: ${self:provider.environment.USER_TABLE}

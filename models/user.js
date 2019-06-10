@@ -6,40 +6,45 @@ import dynamoose from 'dynamoose' // eslint-disable-line
 
 const { Schema } = dynamoose
 const userSchema = new Schema({
-  email: {
+  CognitoId: {
     type: String,
     required: true,
     hashKey: true
   },
-  password: {
+  Email: {
     type: String,
-    required: true
+    trim: true,
+    required: true,
+    index: {
+      global: true,
+      name: 'Email-index',
+      project: true, // ProjectionType: ALL
+      throughput: 5 // read and write are both 5
+    }
   },
-  firstName: String,
-  lastName: String,
-  address: String,
-  country: String,
-  s3KeyForPhoto: String,
-  cellPhone: String,
-  riskTolerance: {
+  FirstName: String,
+  LastName: String,
+  Address: String,
+  Country: String,
+  S3KeyForPhoto: String,
+  CellPhone: String,
+  RiskTolerance: {
     type: String,
     enum: ['low', 'mdeium', 'high']
   },
-  userGoals: {
-    type: [Number]
-  },
-  helpPyhsisSaveMoneyFlag: Boolean,
-  investingFor: String,
-  dob: Date,
-  userMakesMoney: String,
-  userPortfolio: {
+  UserGoals: String,
+  HelpPyhsisSaveMoney: Boolean,
+  InvestingFor: String,
+  Dob: Date,
+  UserMakesMoney: String,
+  UserPortfolio: {
     type: [String]
   },
-  userThemes: {
+  UserThemes: {
     type: [String]
   },
-  investmentPerYear: String,
-  investmentPerMonth: String
+  InvestmentPerYear: String,
+  InvestmentPerMonth: String
 })
 
-export const User = dynamoose.model(process.env.USER_TABLE, userSchema)
+export const User = dynamoose.model('ProdPhysisUser', userSchema)
