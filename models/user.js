@@ -3,24 +3,25 @@ if (!global._babelPolyfill) {
 }
 
 import dynamoose from 'dynamoose' // eslint-disable-line
-
+/*dynamoose.AWS.config.update({
+  region: 'us-east-1'
+})*/
 const { Schema } = dynamoose
 const userSchema = new Schema({
   CognitoId: {
-    type: String,
-    required: true,
-    hashKey: true
-  },
-  Email: {
     type: String,
     trim: true,
     required: true,
     index: {
       global: true,
-      name: 'Email-index',
+      name: 'CognitoId-index',
       project: true, // ProjectionType: ALL
       throughput: 5 // read and write are both 5
-    }
+    }},
+  Email: {
+    type: String,
+    required: true,
+    hashKey: true
   },
   FirstName: String,
   LastName: String,

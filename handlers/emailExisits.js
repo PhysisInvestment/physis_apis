@@ -14,6 +14,7 @@ const handler = ({email}, context, callback) => {
     if (err) {
       callback(null, handleErr(err))
     } else {
+      console.log('valu get from dynamoDB', item)
       const response = {
         statusCode: 200,
         body: JSON.stringify({
