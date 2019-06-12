@@ -18,6 +18,8 @@
     "lodash": "^4.17.11",
     "middy": "^0.20.0",
     "parse-error": "^0.2.0",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "serverless-aws-alias": "^1.7.1",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
