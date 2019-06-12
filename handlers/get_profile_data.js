@@ -8,16 +8,18 @@ import { cors } from 'middy/middlewares' // eslint-disable-line
 
 const handler = async (request, context, callback) => {
   console.log('the infor form request ', request)
-  const [getUserError, profileData] = await to(User.get(request.Email))
+  const [getUserError, profileData] = await to(User.get(request.email))
   getUserError
     ? callback(null, handleErr(getUserError, 500))
     : callback(null, generateProfileData(profileData))
 }
 
+// *** Error handling support in promises
 const to = promise =>
   promise
     .then(data => [null, data])
     .catch(err => [pe(err)])
+
 
 const generateProfileData = (data) => (
   {
