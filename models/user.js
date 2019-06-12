@@ -47,5 +47,5 @@ const userSchema = new Schema({
   InvestmentPerYear: String,
   InvestmentPerMonth: String
 })
-
-export const User = dynamoose.model('ProdPhysisUser', userSchema)
+// nedd set envirotm variable on lambda deploy
+export const User = dynamoose.model(process.env.USER_TABLE, userSchema)
