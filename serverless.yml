@@ -12,22 +12,16 @@ plugins:
 
 custom:
   webpack:
-    packager: 'yarn'
+    packager: 'npm'
     packExternalModulesMaxBuffer: 200 * 1024   # Size of stdio buffers for spawned child processes
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: ${opt:stage, 'prod'}
   region: us-east-1
   environment:
-      USER_TABLE: ProdPhysisUser
-
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:*
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/*"
+      USER_TABLE: DevPhysisUser
 
 functions:
   emailExists:
@@ -55,23 +49,3 @@ functions:
           path: api/updateUserProfile
           method: put
           cors: true
-
-#resources:
-# Resources:
-#    userTable:
-#     Type: 'AWS::DynamoDB::Table'
-#      DeletionPolicy: Retain
-#      Properties:
-#        ## a formality for creating table
-#        AttributeDefinitions:
-#          -
-#            AttributeName: CognitoId
-#            AttributeType: S
-#        KeySchema:
-#          -
-#            AttributeName: CognitoId
-#            KeyType: HASH
-#        ProvisionedThroughput:
-#          ReadCapacityUnits: 15
-#          WriteCapacityUnits: 5
-#        TableName: ${self:provider.environment.USER_TABLE}

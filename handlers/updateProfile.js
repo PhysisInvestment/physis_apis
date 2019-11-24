@@ -6,10 +6,8 @@ import {User} from '../models/user' // eslint-disable-line
 import middy from 'middy' // eslint-disable-line
 
 const handler = (request, context, callback) => {
-  console.log(request.body)
-  const updateObject = JSON.parse(request.body)
 
-  User.update(updateObject, (err, dynamoResponse) => {
+  User.update(request, (err, dynamoResponse) => {
     if (err) {
       console.log(err)
       callback(null, {
