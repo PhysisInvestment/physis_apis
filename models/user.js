@@ -45,6 +45,11 @@ const userSchema = new Schema({
   UserPortfolio: {
     type: [String]
   },
+  IsAdvisor: {
+    type: Boolean,
+    default: false,
+    required: false
+  },
   UserThemes: {
     type: [String]
   },
