@@ -38,23 +38,21 @@ const userSchema = new Schema({
     enum: ['low', 'mdeium', 'high']
   },
   UserGoals: String,
-  HelpPyhsisSaveMoney: Boolean,
+  HelpPyhsisSaveMoney: String,
   InvestingFor: String,
   Dob: Date,
   UserMakesMoney: String,
   UserPortfolio: {
     type: [String]
   },
-  IsAdvisor: {
-    type: Boolean,
-    default: false,
-    required: false
-  },
+  IsAdvisor: Boolean,
   UserThemes: {
     type: [String]
   },
   InvestmentPerYear: String,
-  InvestmentPerMonth: String
+  InvestmentPerMonth: String,
+  useNativeBooleans: true,
+  useDocumentTypes: true
 })
 // nedd set env variable on lambda deploy
 export const User = dynamoose.model(process.env.USER_TABLE, userSchema)

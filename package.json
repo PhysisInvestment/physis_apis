@@ -13,7 +13,7 @@
     "aws-sdk": "^2.455.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
-    "dynamoose": "^0.8.6",
+    "dynamoose": "2.2.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "middy": "^0.20.0",
