@@ -6,9 +6,17 @@ import {User} from '../models/user' // eslint-disable-line
 import middy from 'middy' // eslint-disable-line
 
 const handler = (request, context, callback) => {
-  User.update(request, (err, dynamoResponse) => {
+  let updateBody = JSON.parse(request.body)
+  console.log(`request ${JSON.stringify(request)}`)
+  let IsAdvisor = request.requestContext.authorizer.claims['IsAdvisor']
+  updateBody.CognitoId = request.requestContext.authorizer.claims.sub
+  updateBody.IsAdvisor = IsAdvisor ? 'true' : 'false'
+  updateBody.UserGoals = updateBody.UserGoals.join(',')
+  updateBody.Dob = Date.parse(updateBody.Dob)
+  console.log(`request ${JSON.stringify(request['body-json'])}`)
+  User.update(updateBody, (err, dynamoResponse) => {
     if (err) {
-      console.log(err)
+      console.log(`error : ${JSON.stringify(err)}, request ${JSON.stringify(request)}`)
       callback(null, {
         statusCode: 500,
         body: JSON.stringify('error on saving on dynamo check data schema')

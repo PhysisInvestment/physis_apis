@@ -35,10 +35,10 @@ const userSchema = new Schema({
   CellPhone: String,
   RiskTolerance: {
     type: String,
-    enum: ['low', 'mdeium', 'high']
+    enum: ['low', 'medium', 'high']
   },
   UserGoals: String,
-  HelpPyhsisSaveMoney: Boolean,
+  HelpPyhsisSaveMoney: String,
   InvestingFor: String,
   Dob: Date,
   UserMakesMoney: String,
@@ -46,8 +46,8 @@ const userSchema = new Schema({
     type: [String]
   },
   IsAdvisor: {
-    type: Boolean,
-    default: false
+    type: String,
+    default: 'false'
   },
   UserThemes: {
     type: [String]

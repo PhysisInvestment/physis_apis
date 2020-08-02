@@ -7,9 +7,9 @@ import middy from 'middy' // eslint-disable-line
 import {cors} from 'middy/middlewares' // eslint-disable-line
 
 const handler = async (request, context, callback) => {
-  console.log('the infor form request ', request)
+  console.log('the info  from request ', request)
   const [getUserError, profileData] = await to(User.get(request.email))
-  console.log('error get user error form dynamo', getUserError)
+  console.log(`error : ${JSON.stringify(getUserError)} data: ${JSON.stringify(profileData)}`)
   getUserError
     ? callback(null, handleErr(getUserError, 500))
     : callback(null, generateProfileData(profileData))
